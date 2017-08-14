@@ -144,3 +144,156 @@ CREATE TABLE Movies
     duration int CHECK (duration > 0)
 );
 
+
+/*Normalization*/
+
+SELECT id
+FROM Movies
+WHERE title = 'Peter Pan';
+
+SELECT genre_id
+FROM Movies_Genres
+WHERE movie_id = 2;
+
+SELECT name
+FROM Genres
+WHERE id = 2 or id = 3;
+/*WHERE id IN (2, 3);*/
+
+
+/*Relationships*/
+
+/*One-to-One
+  One-to-Many
+  Many-to-Many*/
+
+
+
+/*Inner Joins*/  
+
+SELECT review, movie_id
+FROM Reviews;
+
+SELECT title
+FROM Movies
+WHERE id IN (1, 3, 4);
+
+SELECT *
+FROM Movies
+INNER JOIN Reviews
+ON Movies.id = Reviews.movie_id;
+/*Same result*/
+SELECT *
+FROM Reviews
+INNER JOIN Movies
+ON Reviews.movie_id = Movies.id;
+
+
+SELECT Movies.title, Reviews.review
+FROM Movies
+INNER JOIN Reviews
+ON Movies.id = Reviews.movie_id;
+
+
+SELECT Movies.title, Genres.name
+FROM Movies
+INNER JOIN Movies_Genres
+ON Movies.id = Movies_Genres.movie_id
+INNER JOIN Genres
+ON Movies_Genres.genre_id = Genres.id
+WHERE Movies.title = 'Peter Pan';
+
+
+SELECT Actors.name, Movies.title FROM Actors
+INNER JOIN Actors_Movies ON Actors.id = Actors_Movies.actor_id
+INNER JOIN Movies ON Actors_Movies.movie_id = Movies.id
+ORDER BY Movies.title ASC;
+
+
+/*Aliases*/
+SELECT Movies.title AS films, Reviews.review AS reviews
+FROM Movies
+INNER JOIN Reviews
+ON Movies.id = Reviews.movie_id;
+
+
+SELECT Movies.title "Weekly Movies",
+Reviews.review "Weekly Reviews"
+FROM Movies
+INNER JOIN Reviews
+ON Movies.id = Reviews.movie_id;
+
+SELECT m.title, Reviews.review
+FROM Movies m
+INNER JOIN Reviews
+ON m.id = Reviews.movie_id
+ORDER BY m.title;
+
+SELECT m.title, r.review
+FROM Movies m
+INNER JOIN Reviews r
+ON m.id = r.movie_id
+ORDER BY m.title;
+
+
+SELECT m.title, g.name
+FROM Movies m
+INNER JOIN Movies_Genres mg
+ON m.id = mg.movie_id
+INNER JOIN Genres g
+ON mg.genre_id = g.id
+WHERE m.title = 'Peter Pan';
+
+
+/*Outer Joins*/
+
+SELECT *
+FROM Movies
+LEFT OUTER JOIN Reviews
+ON Movies.id = Reviews.movie_id;
+
+
+SELECT m.title, r.review
+FROM Movies m
+LEFT OUTER JOIN Reviews r
+ON m.id = r.movie_id
+ORDER BY r.id;
+
+
+
+SELECT *
+FROM Movies
+RIGHT OUTER JOIN Reviews
+ON Movies.id = Reviews.movie_id;
+
+
+SELECT m.title, r.review
+FROM Movies m
+RIGHT OUTER JOIN Reviews r
+ON m.id = r.movie_id
+ORDER BY r.id;
+
+
+/*Subqueries*/
+
+
+SELECT SUM(sales)
+FROM Movies
+WHERE id IN(
+    SELECT movie_id
+    FROM Promotions
+    WHERE category = 'Non-cash'
+);
+
+
+/*JOIN query*/
+SELECT SUM(m.sales)
+FROM Movies m
+INNER JOIN Promotions p
+ON m.id = p.movie_id
+WHERE p.category = 'Non cash';
+
+
+SELECT * FROM Movies WHERE duration >
+(SELECT AVG(duration) FROM Movies);
+
