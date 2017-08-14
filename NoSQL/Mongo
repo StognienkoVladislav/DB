@@ -1,0 +1,47 @@
+
+
+
+
+/*In SHELL*/
+
+> var potion = {
+    "name"   : "Invisibility",
+    "vendor" : "Kettlecooked"
+}
+
+> potion
+{
+    "name"   : "Invisibility",
+    "vendor" : "Kettlecooked"
+}
+
+
+
+> use reviews
+switched to db reviews
+
+>db
+reviews
+
+> show dbs
+test            0.078GB
+reviews         0.078GB
+
+
+##To add into Collection
+
+>db.potions.insert(
+    {
+        "name"   : "Invisibility",
+        "vendor" : "Kettlecooked"
+    }
+)
+
+
+>db.potions.find()
+{
+    "_id"    : ObjectId("34523532sdfa3asdf32r"),
+    "name"   : "Invisibility",
+    "vendor" : "Kettlecooked"
+}
+
