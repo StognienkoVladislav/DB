@@ -45,3 +45,69 @@ reviews         0.078GB
     "vendor" : "Kettlecooked"
 }
 
+
+
+> db.potions.find({"name" : "Invisibility"})
+
+>db.potions.find({"vendor" : "Kettlecooked"})
+
+
+> db.potions.insert(
+ {
+    "name" : "Invisibility",
+    "vendor" : "Kettlecooked",
+    "price" : 10.99,
+    "score" : 59,
+    "tryDate" : new Date(2012, 8, 13),
+    "ingredients" : ["newt toes", 42, "laughter"],
+    "ratings" : {"strength" : 2, "flavor" : 5}
+
+ }
+)
+
+
+> db.potions.find({"ingredients" : "laughter"})
+
+> db.potions.find({"ratings.flavor" : 5})
+
+
+
+Removing and Modifying Documents
+
+db.potions.remove(
+    {
+        "name" : "Love"
+    }
+)
+
+
+db.potions.remove(
+    {"vendor" : "Kettlecooked"}
+)
+
+
+db.potions.update(
+    {"name" : "Love"},
+    {"#set" : {"price" : 3.99}}
+)
+
+
+db.potions.update(
+    {"vendor" : "KC"},
+    {"$set" : {"vendor" : "Kettlecooked"}},
+    {"multi" : true}
+)
+
+
+db.logs.update(
+    {"potion" : "Shrinking"},
+    {"$inc" : {"count" : 1}}
+)
+
+
+
+db.logs.update(
+    {"potion" : "Love"},
+    {"$inc" : {"count" : 1}},
+    {"upsert" : true}           #Create doc and update params
+)
