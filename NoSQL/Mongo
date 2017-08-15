@@ -222,3 +222,109 @@ db.wands.update(
 )
 
 
+
+db.wands.update(
+  {},
+  {"$mul":{"damage.melee":10}},
+  {multi: true}
+)
+
+
+db.potions.find(
+    {
+        "vendor" : "Kettlecooked",
+        "ratings.strength" : 5
+    }
+)
+
+
+
+##########################
+$gt = greater than
+$gte = greater than or equal toes
+
+$lt = less than
+$lte = less than or equal to
+
+$ne = not equal to
+##########################
+
+
+db.potions.find({"price" : {"$lt" : 20}})
+
+db.potions.find({"price" : {"$gt" : 10, "$lt": 20}})
+
+db.potions.find({"vendor" : {"$ne" : "Brewers"}})
+
+
+db.potions.find(
+    {"sizes" : {"$elemMatch" : {"$gt" : 8, "$lt" : 16}}}
+)
+
+db.potions.find(
+    {"sizes" : {"$gt" : 8, "$lt" : 16}}
+)
+
+##########################
+db.wands.find(
+  {
+    "maker" : "Moonsap",
+    "level_required" : 5
+  }
+)
+
+db.wands.find(
+  {"level_required" : {"$lte" : 5}}
+)
+
+
+db.wands.find(
+  {"powers" : {"$ne" : "Love Burst"}}
+)
+
+
+db.wands.find(
+  {"damage.melee" : {"$gte" : 30, "$lte" : 40}}
+)
+
+
+db.wands.find(
+  {"lengths" : {"$elemMatch" : {"$gte" : 2.5, "$lt" : 3}}}
+)
+
+db.wands.find(
+  {"maker" : {"$ne" : "Foxmond"},
+  "level_required" : {"$lte" : 75},
+  "price" : {"$lt" : 50},
+  "lengths" : {"$elemMatch" : {"$gte" : 3, "$lte" : 4}}}
+)
+
+
+##########################
+
+db.potions.find(
+    {"grade" : {"$gte" : 80}},
+    {"vendor" : true, "name" : true}
+)
+
+
+db.potions.find(
+    {"grade" : {"$gte" : 80}},
+    {"vendor" : false, "price" : false}
+)
+
+
+db.potions.find(
+    {"grade" : {"$gte" : 80}},
+    {"vendor" : true, "price" : true, "_id" : false}
+)
+
+
+db.potions.find().count()
+
+
+db.potions.find().sort({"price" : 1})      #from low
+
+
+db.potions.find().skip(3).limit(3)
+
