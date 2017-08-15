@@ -328,3 +328,216 @@ db.potions.find().sort({"price" : 1})      #from low
 
 db.potions.find().skip(3).limit(3)
 
+
+##########################
+
+db.wands.find(
+  {},
+  {"name" : true},
+).sort({"name" : 1})
+
+
+
+
+db.wands.find(
+  {},
+  {"name" : true, "powers":true, "_id" : false}
+)  
+
+
+
+db.wands.find(
+  {"level_required" : 2}
+).count()
+
+
+
+db.wands.find({}).skip(0).limit(8)
+
+
+db.wands.find(
+  {}
+).sort({"price" : -1}).limit(3)
+
+
+##########################
+
+
+db.vendors.insert({
+    "_id" : "Kettlecooked",
+    "phone" : 555555555,
+    "organic" : true
+})
+
+db.potions.insert({
+    "name" : "Invisibility",
+    "vendor_id" : "Kettlecooked"
+})
+
+
+
+
+db.potions.find({"name" : "Invisibility"})
+
+db.vendors.find({"_id" : "Kettlecooked"})
+
+
+
+db.users.find({}, {"email" : true, "favrites" : true})
+
+##########################
+
+
+
+db.potions.find({}, {"name" : true, "vendor" : true})
+
+
+db.potions.aggregate(
+    [{"$group" : {"_id" : "$vendor_id", "total" : {"$sum" : 1}}}]   #+1 при  каждому повторе vendor_id
+)
+
+
+
+db.potions.aggregate([
+    {"$group" : {
+        "_id" : "$vendor_id",
+        "total" : {"$sum" : 1},
+        "grade_total" : {"$sum" : "$grade"}
+    }}
+])
+
+
+db.potions.aggregate([
+    {
+        "$group" : {
+            "_id" : "$vendor_id",
+            "avg_grade" : {"$avg" : "$grade"}
+        }
+    }
+])
+
+
+db.potions.aggregate([
+    {
+        "$group" : {
+            "_id" : "$vendor_id",
+            "max_grade" : {"$max" : "$grade"},
+            "min_grade" : {"$min" : "$grade"}
+        }
+    }
+])
+
+
+##########################
+
+db.wands.aggregate([{
+  "$group":{
+    "_id" : "$maker"
+  }
+}])
+
+
+
+db.wands.aggregate([{
+  "$group" : {
+    "_id" : "$damage.magic",
+    "wand_count" : {"$sum" : 1}
+  }
+}])
+
+
+db.wands.aggregate([{
+  "$group" : {
+    "_id" : "$maker",
+    "total_cost" : {"$sum" : "$price"}
+  }
+}])
+
+db.wands.aggregate([{
+  "$group" : {
+    "_id" : "$level_required",
+    "price_average" : {"$avg" : "$price"}
+  }
+}])
+
+
+db.wands.aggregate([{
+  "$group" : {
+    "_id" : "$maker",
+    "total_wands" : {"$sum" : 1},
+    "max_magic" : {"$max" : "$damage.magic"},
+    "lowest_price" : {"$min" : "$price"}
+  }
+}])
+
+
+##########################
+
+
+db.potions.aggregate([stage, stage, stage])
+
+db.potions.aggregate([
+    {"$group" : {"_id" : "$vendor_id" , "total" : {"$sum" : 1}}}
+])
+
+
+
+
+db.potions.aggregate([
+    {"$match" : {"ingredients" : "unicorn"}},
+    {
+        "$group":
+        {
+            "_id" : "$vendor_id",
+            "potion_count" : {"$sum" : 1}
+        }
+    }
+])
+
+
+
+
+db.potions.aggregate([
+    {"$match" : {"price" : {"$lt" : 15}}},
+    {"$project" : {"_id" : false, "vendor_id" : true, "grade" : true}},
+    {"$group" : {"_id" : "$vendor_id", "avg_grade" : {"$avg" : "$grade"}}},
+    {"$sort" : {"avg_grade" : -1}},
+    {"$limit" : 3}
+])
+
+
+
+db.wands.aggregate([
+  {"$match" : {"powers": "Air Bolt"}},
+  {"$group" : {
+    "_id" : "$maker",
+    "lowest_level" : {"$min" : "$level_required"}
+  }}
+])
+
+
+
+db.wands.aggregate([
+  {"$match" : {"price" : {"$lt" : 50}}},
+  {"$group" : {
+    "_id" : "$maker",
+    "average_magic" : {"$avg" : "$damage.magic"}
+  }},
+  {"$match" : {"average_magic" : {"$gt" : 40}}}
+])
+
+
+
+
+
+db.wands.aggregate([
+  {"$match" : {"level_required" : {"$lte": 5}}},
+  {"$project" : {"_id" : false, "maker" : true, "damage.magic" : true}},
+  {"$group" : {
+    "_id" : "$maker",
+    "max_damage" : {"$max" : "$damage.magic"},
+  }},
+  {"$sort" : {"max_damage" : -1}},
+  {"$limit" : 4}
+])
+
