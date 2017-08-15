@@ -111,3 +111,114 @@ db.logs.update(
     {"$inc" : {"count" : 1}},
     {"upsert" : true}           #Create doc and update params
 )
+
+
+
+
+db.logs.update(
+  {"name":"Dream Bender"},
+  {"$inc" : {"count":1}},
+  {"upsert":true}
+)
+
+
+
+db.potions.update(
+    {},
+    {"$unset":{"color" : ""}},
+    {"multi" : true}
+)
+
+
+db.potions.update(
+    {},
+    {"$rename" : {"score" : "grade"}},
+    {"multi" : true}
+)
+
+
+db.potions.update(
+    {"ingredients" : "secret"},
+    {"$set" : {"ingredients" : "42"}}               X
+)
+
+
+
+db.potions.update(
+    {"name" : "Shrinking"},
+    {"$set" : {"ingredients.1" : 42}}
+)
+
+
+db.potions.update(
+    {"ingredients" : "secret"},
+    {"$set" : {"ingredients.$" : 42}},
+    {"multi" : true}
+)
+
+
+db.potions.update(
+    {"name" : "Shrinking"},
+    {"$set" : {"ratings.strength" : 5}}
+)
+
+
+db.potions.update(
+    {"name" : "Shrinking"},
+    {"$pop" : {"categories" : 1}}       -1 = first element / 1 = last
+)
+
+
+db.potions.update(
+    {"name" : "Shrinking"},
+    {"$push" : {"categories" : "budget"}}
+)
+
+
+db.potions.update(
+    {"name" : "Shrinking"},
+    {"$addToSet" : {"categories" : "budget"}}
+)
+
+
+db.potions.update(
+    {"name" : "Shrinking"},
+    {"$pull" : {"categories" : "tasty"}}
+)
+
+/////////////////////////////////////////////////////////////////////
+
+db.wands.update(
+  {},
+  {"$rename":{"creator":"maker"}},
+  {"multi": true}
+)
+
+
+db.wands.update(
+  {"name": "Dream Bender"},
+  {"$set" : {"powers.0":"Fire Deflection"}}
+)
+
+
+db.wands.update(
+  {"powers": "Love"},
+  {"$set":{"powers.$":"Love Burst"}},
+  {"multi": true}
+)
+
+
+
+db.wands.update(
+  {"name": "Dream Bender"},
+  {"$push" : {"powers":"Spell Casting"}}
+)
+
+
+db.wands.update(
+  {},
+  {"$addToSet":{"powers":"Spell Casting"}},
+  {"multi": true}
+)
+
+
